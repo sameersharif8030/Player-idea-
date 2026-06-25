@@ -514,14 +514,14 @@ export default function AndroidSimulator({
                 <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded-lg space-y-2">
                   <div className="flex items-center space-x-1.5 text-[10px] font-mono text-zinc-300">
                     <Github className="w-4 h-4 text-pink-500" />
-                    <span className="font-semibold text-zinc-200">sameersharif/tapedeck-stealth</span>
+                    <span className="font-semibold text-zinc-200">sameersharif8030/Player-idea-</span>
                   </div>
                   <p className="text-[10px] font-mono text-zinc-500 leading-normal">
                     Clone the repo or grab the latest package to play your background tracks secretly with total customizability.
                   </p>
                   
                   <a 
-                    href="https://github.com/sameersharif/tapedeck-stealth/releases" 
+                    href="https://github.com/sameersharif8030/Player-idea-" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="flex items-center justify-center space-x-1.5 py-1.5 px-3 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white text-[10px] font-mono rounded-md transition-all cursor-pointer font-bold w-full active:scale-95 text-center shadow-lg shadow-pink-500/10 border border-pink-500/30"
