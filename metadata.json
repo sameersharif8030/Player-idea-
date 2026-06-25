@@ -1,0 +1,6 @@
+{
+  "name": "TapeDeck Music Player",
+  "description": "Retro local synthwave music player prototyping Stealth Mode and interactive MediaSession controls",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
