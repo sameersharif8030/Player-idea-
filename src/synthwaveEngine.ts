@@ -293,6 +293,18 @@ class SynthwaveEngine {
     }
   }
 
+  public seek(seconds: number) {
+    this.init();
+    if (this.audioElement && this.audioElement.src) {
+      this.audioElement.currentTime = seconds;
+    } else {
+      this.synthTime = seconds;
+    }
+    if (this.onTimeUpdate) {
+      this.onTimeUpdate(seconds);
+    }
+  }
+
   private stopCurrentPlayback() {
     this.isPlaying = false;
     if (this.audioElement) {

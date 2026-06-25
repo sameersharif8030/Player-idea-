@@ -1,6 +1,6 @@
 {
   "name": "TapeDeck Music Player",
-  "description": "Retro local synthwave music player prototyping Stealth Mode and interactive MediaSession controls",
+  "description": "Premium, clean Android music player UI with responsive layouts, high-fidelity controls, local folder parsing, and real-time audio visualizers",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
