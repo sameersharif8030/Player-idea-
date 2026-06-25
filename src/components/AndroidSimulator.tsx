@@ -3,7 +3,7 @@ import { Track, StealthModeSettings } from '../types';
 import { 
   Play, Pause, SkipForward, SkipBack, EyeOff, Eye, 
   Smartphone, Lock, Bell, BellOff, Bluetooth, Headphones, 
-  BatteryCharging, Wifi, Signal, Clock
+  BatteryCharging, Wifi, Signal, Clock, Download, Github, CheckCircle2, Package
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -26,8 +26,49 @@ export default function AndroidSimulator({
   onNext,
   onPrev
 }: AndroidSimulatorProps) {
-  const [activeTab, setActiveTab] = useState<'LOCKSCREEN' | 'NOTIFICATIONS' | 'EARBUDS'>('LOCKSCREEN');
+  const [activeTab, setActiveTab] = useState<'LOCKSCREEN' | 'NOTIFICATIONS' | 'EARBUDS' | 'APK_INSTALLER'>('LOCKSCREEN');
   const [isPhoneLocked, setIsPhoneLocked] = useState(true);
+  
+  // Interactive APK install simulation states
+  const [installState, setInstallState] = useState<'IDLE' | 'DOWNLOADING' | 'SUCCESS'>('IDLE');
+  const [installProgress, setInstallProgress] = useState(0);
+  const [installStepText, setInstallStepText] = useState('');
+
+  const startInstallation = () => {
+    if (installState !== 'IDLE') return;
+    setInstallState('DOWNLOADING');
+    setInstallProgress(5);
+    setInstallStepText('Connecting to github.com...');
+    
+    let progress = 5;
+    const interval = setInterval(() => {
+      progress += Math.floor(Math.random() * 15) + 5;
+      if (progress >= 100) {
+        progress = 100;
+        setInstallProgress(100);
+        setInstallState('SUCCESS');
+        setInstallStepText('Package tapedeck-v1.0.apk successfully installed.');
+        clearInterval(interval);
+      } else {
+        setInstallProgress(progress);
+        if (progress < 30) {
+          setInstallStepText('Downloading apk archive from GitHub Releases...');
+        } else if (progress < 60) {
+          setInstallStepText('Verifying package certificates and sha256 checksums...');
+        } else if (progress < 80) {
+          setInstallStepText('Android Play Protect safety scanning: OK');
+        } else {
+          setInstallStepText('Optimizing native DEX files & establishing notification channel...');
+        }
+      }
+    }, 250);
+  };
+
+  const resetInstallation = () => {
+    setInstallState('IDLE');
+    setInstallProgress(0);
+    setInstallStepText('');
+  };
 
   // Formatting song time
   const formatTime = (seconds: number) => {
@@ -274,6 +315,105 @@ export default function AndroidSimulator({
                   </div>
                 )}
 
+                {/* CASE D: APK INSTALLER */}
+                {activeTab === 'APK_INSTALLER' && (
+                  <div className="bg-zinc-900/95 border border-zinc-800 p-3 rounded-2xl text-left space-y-2.5 relative overflow-hidden flex flex-col justify-between min-h-[220px]">
+                    {installState === 'IDLE' && (
+                      <div className="space-y-2.5 flex-1 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center space-x-1.5 mb-1.5">
+                            <div className="w-5 h-5 rounded-md bg-zinc-950 flex items-center justify-center border border-zinc-800">
+                              <span className="text-[10px] font-bold text-pink-500">TD</span>
+                            </div>
+                            <span className="text-[9px] font-mono text-zinc-400 font-semibold">Package Installer</span>
+                          </div>
+                          <h4 className="text-[11px] font-bold text-zinc-100">Do you want to install this app?</h4>
+                          <p className="text-[9px] text-zinc-400 leading-normal mt-1">
+                            TapeDeck v1.0 • Built for <span className="text-pink-400 font-bold">Sammy</span>
+                          </p>
+                          <div className="mt-2 p-1.5 bg-zinc-950/80 rounded border border-zinc-800/50 text-[8px] text-zinc-500 space-y-1">
+                            <p>🌐 Requires Internet access</p>
+                            <p>🎙 Foreground Audio Service registration</p>
+                          </div>
+                        </div>
+
+                        <div className="flex space-x-2 pt-1.5">
+                          <button 
+                            onClick={() => setActiveTab('LOCKSCREEN')}
+                            className="flex-1 py-1 px-2 bg-zinc-950 border border-zinc-800 hover:border-zinc-700 rounded text-[9px] font-mono text-zinc-400 text-center cursor-pointer"
+                          >
+                            Cancel
+                          </button>
+                          <button 
+                            onClick={startInstallation}
+                            className="flex-1 py-1 px-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white rounded text-[9px] font-mono font-bold text-center active:scale-95 transition-all cursor-pointer flex items-center justify-center space-x-1"
+                          >
+                            <Download className="w-2.5 h-2.5" />
+                            <span>Install</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {installState === 'DOWNLOADING' && (
+                      <div className="space-y-4 flex-1 flex flex-col justify-center py-4">
+                        <div className="text-center space-y-1.5">
+                          <div className="w-8 h-8 rounded-full bg-pink-950/40 border border-pink-500/30 flex items-center justify-center mx-auto animate-spin">
+                            <div className="w-4 h-4 rounded-full border-2 border-t-pink-500 border-r-transparent border-b-transparent border-l-transparent" />
+                          </div>
+                          <span className="text-[9px] font-mono text-pink-400 block animate-pulse">Installing...</span>
+                        </div>
+
+                        <div className="space-y-1">
+                          <div className="w-full h-1 bg-zinc-950 rounded-full overflow-hidden border border-zinc-800/50">
+                            <div className="h-full bg-gradient-to-r from-pink-500 to-purple-600 rounded-full transition-all duration-300" style={{ width: `${installProgress}%` }} />
+                          </div>
+                          <div className="flex justify-between text-[7px] text-zinc-500 font-mono">
+                            <span>{installProgress}%</span>
+                            <span className="truncate max-w-[120px] text-right">{installProgress < 45 ? 'Downloading...' : 'Configuring...'}</span>
+                          </div>
+                        </div>
+
+                        <p className="text-[8px] font-mono text-zinc-500 text-center leading-normal italic px-1 h-6">
+                          {installStepText}
+                        </p>
+                      </div>
+                    )}
+
+                    {installState === 'SUCCESS' && (
+                      <div className="space-y-2.5 flex-1 flex flex-col justify-between text-center">
+                        <div className="pt-2">
+                          <div className="w-9 h-9 rounded-full bg-emerald-950/40 border border-emerald-500/30 flex items-center justify-center mx-auto mb-2">
+                            <CheckCircle2 className="w-5 h-5 text-emerald-400 animate-bounce" />
+                          </div>
+                          <h4 className="text-[11px] font-bold text-zinc-100">App installed.</h4>
+                          <p className="text-[8px] text-zinc-400 leading-normal mt-1">
+                            TapeDeck is ready. Stealth foreground services initialized and tested successfully!
+                          </p>
+                        </div>
+
+                        <div className="flex space-x-1.5">
+                          <button 
+                            onClick={resetInstallation}
+                            className="flex-1 py-1 px-2 bg-zinc-950 border border-zinc-800 hover:border-zinc-700 rounded text-[9px] font-mono text-zinc-400 text-center cursor-pointer"
+                          >
+                            Reinstall
+                          </button>
+                          <button 
+                            onClick={() => {
+                              setActiveTab('NOTIFICATIONS');
+                              resetInstallation();
+                            }}
+                            className="flex-1 py-1 px-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded text-[9px] font-mono text-center active:scale-95 transition-all cursor-pointer"
+                          >
+                            Open App
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
               </div>
 
               {/* BOTTOM: Android Navigation Gestures */}
@@ -293,24 +433,30 @@ export default function AndroidSimulator({
           {/* Simulator Tabs */}
           <div className="space-y-2">
             <span className="text-[10px] font-bold font-mono text-zinc-400 uppercase tracking-widest block">Select Simulated View</span>
-            <div className="grid grid-cols-3 gap-1.5 bg-zinc-950 p-1 rounded-xl border border-zinc-800">
+            <div className="grid grid-cols-4 gap-1 bg-zinc-950 p-1 rounded-xl border border-zinc-800">
               <button
                 onClick={() => setActiveTab('LOCKSCREEN')}
-                className={`py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${activeTab === 'LOCKSCREEN' ? 'bg-pink-600 text-white font-bold' : 'text-zinc-400 hover:text-white hover:bg-zinc-900'}`}
+                className={`py-1.5 rounded-lg text-[10px] font-mono transition-all cursor-pointer ${activeTab === 'LOCKSCREEN' ? 'bg-pink-600 text-white font-bold' : 'text-zinc-400 hover:text-white hover:bg-zinc-900'}`}
               >
                 Lockscreen
               </button>
               <button
                 onClick={() => setActiveTab('NOTIFICATIONS')}
-                className={`py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${activeTab === 'NOTIFICATIONS' ? 'bg-pink-600 text-white font-bold' : 'text-zinc-400 hover:text-white hover:bg-zinc-900'}`}
+                className={`py-1.5 rounded-lg text-[10px] font-mono transition-all cursor-pointer ${activeTab === 'NOTIFICATIONS' ? 'bg-pink-600 text-white font-bold' : 'text-zinc-400 hover:text-white hover:bg-zinc-900'}`}
               >
-                Notifications
+                Notif
               </button>
               <button
                 onClick={() => setActiveTab('EARBUDS')}
-                className={`py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${activeTab === 'EARBUDS' ? 'bg-pink-600 text-white font-bold' : 'text-zinc-400 hover:text-white hover:bg-zinc-900'}`}
+                className={`py-1.5 rounded-lg text-[10px] font-mono transition-all cursor-pointer ${activeTab === 'EARBUDS' ? 'bg-pink-600 text-white font-bold' : 'text-zinc-400 hover:text-white hover:bg-zinc-900'}`}
               >
                 Earbuds
+              </button>
+              <button
+                onClick={() => setActiveTab('APK_INSTALLER')}
+                className={`py-1.5 rounded-lg text-[10px] font-mono transition-all cursor-pointer ${activeTab === 'APK_INSTALLER' ? 'bg-pink-600 text-white font-bold' : 'text-zinc-400 hover:text-white hover:bg-zinc-900'}`}
+              >
+                APK Install
               </button>
             </div>
           </div>
@@ -357,6 +503,34 @@ export default function AndroidSimulator({
                 <span className="text-blue-300 font-semibold">🎧 Bluetooth Earbud Integrity:</span>{' '}
                 Even with all visual references hidden, our app is registered with Android's active <code className="text-[10px] bg-zinc-900 px-1 py-0.5 rounded text-zinc-300">MediaSession</code> system. This guarantees earbud buttons work perfectly to play/pause and skip!
               </p>
+            )}
+
+            {activeTab === 'APK_INSTALLER' && (
+              <div className="space-y-3 text-left">
+                <p className="text-xs text-zinc-400 leading-normal">
+                  <span className="text-pink-400 font-bold">📦 Real APK Source Code & Artifacts:</span>
+                  {' '}Compile and run TapeDeck's source direct from GitHub on your physical Android phone! Complete with foreground services, bluetooth triggers, and stealth settings.
+                </p>
+                <div className="p-2.5 bg-zinc-950/80 border border-zinc-800 rounded-lg space-y-2">
+                  <div className="flex items-center space-x-1.5 text-[10px] font-mono text-zinc-300">
+                    <Github className="w-4 h-4 text-pink-500" />
+                    <span className="font-semibold text-zinc-200">sameersharif/tapedeck-stealth</span>
+                  </div>
+                  <p className="text-[10px] font-mono text-zinc-500 leading-normal">
+                    Clone the repo or grab the latest package to play your background tracks secretly with total customizability.
+                  </p>
+                  
+                  <a 
+                    href="https://github.com/sameersharif/tapedeck-stealth/releases" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center space-x-1.5 py-1.5 px-3 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white text-[10px] font-mono rounded-md transition-all cursor-pointer font-bold w-full active:scale-95 text-center shadow-lg shadow-pink-500/10 border border-pink-500/30"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Download APK Release</span>
+                  </a>
+                </div>
+              </div>
             )}
 
             {/* Simulated Bluetooth earbud buttons for hands-on control */}
