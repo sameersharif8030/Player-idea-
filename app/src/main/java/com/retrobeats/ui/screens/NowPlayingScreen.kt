@@ -17,14 +17,16 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.retrobeats.ui.components.CassetteReel
 import com.retrobeats.ui.components.NeonBarsVisualizer
 import com.retrobeats.ui.components.OscilloscopeVisualizer
 import com.retrobeats.ui.components.OrbitRingVisualizer
 import com.retrobeats.ui.components.StarburstVisualizer
-import com.retrobeats.ui.theme.RetroAmber
 import com.retrobeats.ui.theme.RetroCream
 import com.retrobeats.ui.theme.RetroDark
+import com.retrobeats.ui.theme.SynthwavePink
+import com.retrobeats.ui.theme.SynthwavePurple
 
 private enum class NowPlayingVisualizer(val label: String) {
     NEON("Neon"), WAVE("Wave"), ORBIT("Orbit"), STAR("Star")
@@ -33,27 +35,20 @@ private enum class NowPlayingVisualizer(val label: String) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NowPlayingScreen(
-    navController: androidx.navigation.NavController
+    navController: androidx.navigation.NavController,
+    viewModel: PlayerViewModel = hiltViewModel()
 ) {
-    var isPlaying by remember { mutableStateOf(false) }
-    var currentPosition by remember { mutableFloatStateOf(0f) }
-    var duration by remember { mutableFloatStateOf(187f) } // 3:07
-    var isShuffle by remember { mutableStateOf(false) }
-    var repeatMode by remember { mutableIntStateOf(0) } // 0=off, 1=all, 2=one
+    val playerState by viewModel.state.collectAsState()
     var selectedVisualizer by remember { mutableStateOf(NowPlayingVisualizer.NEON) }
 
-    // Simulate progress when playing
-    LaunchedEffect(isPlaying) {
-        while (isPlaying) {
-            currentPosition = (currentPosition + 1f).coerceAtMost(duration)
-            kotlinx.coroutines.delay(1000)
-        }
-    }
+    val song = playerState.currentSong
+    val currentPosition = playerState.currentPosition / 1000f
+    val duration = playerState.duration / 1000f
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Now Playing", color = RetroAmber, fontWeight = FontWeight.Bold) },
+                title = { Text("Now Playing", color = SynthwavePink, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = RetroCream)
@@ -90,7 +85,7 @@ fun NowPlayingScreen(
                 // Cassette reel behind the art area
                 CassetteReel(
                     modifier = Modifier.size(240.dp),
-                    isSpinning = isPlaying
+                    isSpinning = playerState.isPlaying
                 )
                 // Music note icon in center
                 Icon(
@@ -116,21 +111,21 @@ fun NowPlayingScreen(
                     NowPlayingVisualizer.NEON -> NeonBarsVisualizer(
                         modifier = Modifier.fillMaxSize(),
                         barCount = 24,
-                        activeColor = RetroAmber
+                        activeColor = SynthwavePink
                     )
                     NowPlayingVisualizer.WAVE -> OscilloscopeVisualizer(
                         modifier = Modifier.fillMaxSize(),
-                        waveColor = RetroAmber,
-                        glowColor = RetroAmber.copy(alpha = 0.3f)
+                        waveColor = SynthwavePink,
+                        glowColor = SynthwavePink.copy(alpha = 0.3f)
                     )
                     NowPlayingVisualizer.ORBIT -> OrbitRingVisualizer(
                         modifier = Modifier.fillMaxSize(),
-                        ringColor = RetroAmber,
-                        particleColor = RetroAmber
+                        ringColor = SynthwavePurple,
+                        particleColor = SynthwavePink
                     )
                     NowPlayingVisualizer.STAR -> StarburstVisualizer(
                         modifier = Modifier.fillMaxSize(),
-                        burstColor = RetroAmber,
+                        burstColor = SynthwavePink,
                         rayCount = 20
                     )
                 }
@@ -149,15 +144,15 @@ fun NowPlayingScreen(
                         modifier = Modifier
                             .clip(RoundedCornerShape(16.dp))
                             .clickable { selectedVisualizer = visualizer },
-                        color = if (isSelected) RetroAmber.copy(alpha = 0.2f) else Color.Transparent,
+                        color = if (isSelected) SynthwavePink.copy(alpha = 0.2f) else Color.Transparent,
                         shape = RoundedCornerShape(16.dp),
-                        border = if (isSelected) androidx.compose.foundation.BorderStroke(1.dp, RetroAmber)
+                        border = if (isSelected) androidx.compose.foundation.BorderStroke(1.dp, SynthwavePink)
                         else androidx.compose.foundation.BorderStroke(1.dp, RetroCream.copy(alpha = 0.3f))
                     ) {
                         Text(
                             visualizer.label,
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                            color = if (isSelected) RetroAmber else RetroCream.copy(alpha = 0.7f),
+                            color = if (isSelected) SynthwavePink else RetroCream.copy(alpha = 0.7f),
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                             style = MaterialTheme.typography.labelMedium
                         )
@@ -167,32 +162,32 @@ fun NowPlayingScreen(
 
             Spacer(Modifier.height(24.dp))
 
-            // Song title + artist in large retro typography
+            // Song title + artist
             Text(
-                "Sweet Dreams",
+                song?.title ?: "No Song",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
                 color = RetroCream
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                "Echo",
+                song?.artist ?: "Unknown Artist",
                 style = MaterialTheme.typography.titleLarge,
                 color = RetroCream.copy(alpha = 0.7f)
             )
 
             Spacer(Modifier.height(24.dp))
 
-            // Progress/seek bar with amber color
+            // Progress/seek bar
             Slider(
                 value = currentPosition,
-                onValueChange = { currentPosition = it },
-                valueRange = 0f..duration,
+                onValueChange = { viewModel.seekTo((it * 1000).toLong()) },
+                valueRange = 0f..duration.coerceAtLeast(1f),
                 modifier = Modifier.fillMaxWidth(),
                 colors = SliderDefaults.colors(
-                    thumbColor = RetroAmber,
-                    activeTrackColor = RetroAmber,
-                    inactiveTrackColor = RetroAmber.copy(alpha = 0.3f)
+                    thumbColor = SynthwavePink,
+                    activeTrackColor = SynthwavePink,
+                    inactiveTrackColor = SynthwavePink.copy(alpha = 0.3f)
                 )
             )
 
@@ -201,12 +196,12 @@ fun NowPlayingScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    formatTime((currentPosition * 1000).toLong()),
+                    formatTime(playerState.currentPosition),
                     style = MaterialTheme.typography.labelSmall,
                     color = RetroCream.copy(alpha = 0.6f)
                 )
                 Text(
-                    formatTime((duration * 1000).toLong()),
+                    formatTime(playerState.duration),
                     style = MaterialTheme.typography.labelSmall,
                     color = RetroCream.copy(alpha = 0.6f)
                 )
@@ -220,16 +215,16 @@ fun NowPlayingScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { isShuffle = !isShuffle }) {
+                IconButton(onClick = { viewModel.toggleShuffle() }) {
                     Icon(
                         Icons.Default.Shuffle,
                         contentDescription = "Shuffle",
-                        tint = if (isShuffle) RetroAmber else RetroCream.copy(alpha = 0.7f),
+                        tint = if (playerState.isShuffle) SynthwavePink else RetroCream.copy(alpha = 0.7f),
                         modifier = Modifier.size(28.dp)
                     )
                 }
 
-                IconButton(onClick = { /* Previous */ }) {
+                IconButton(onClick = { viewModel.skipPrevious() }) {
                     Icon(
                         Icons.Default.SkipPrevious,
                         contentDescription = "Previous",
@@ -239,22 +234,22 @@ fun NowPlayingScreen(
                 }
 
                 FilledIconButton(
-                    onClick = { isPlaying = !isPlaying },
+                    onClick = { viewModel.playPause() },
                     modifier = Modifier.size(72.dp),
                     shape = CircleShape,
                     colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = RetroAmber,
+                        containerColor = SynthwavePink,
                         contentColor = RetroDark
                     )
                 ) {
                     Icon(
-                        if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
-                        contentDescription = if (isPlaying) "Pause" else "Play",
+                        if (playerState.isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
+                        contentDescription = if (playerState.isPlaying) "Pause" else "Play",
                         modifier = Modifier.size(36.dp)
                     )
                 }
 
-                IconButton(onClick = { /* Next */ }) {
+                IconButton(onClick = { viewModel.skipNext() }) {
                     Icon(
                         Icons.Default.SkipNext,
                         contentDescription = "Next",
@@ -263,13 +258,11 @@ fun NowPlayingScreen(
                     )
                 }
 
-                IconButton(onClick = {
-                    repeatMode = (repeatMode + 1) % 3
-                }) {
+                IconButton(onClick = { viewModel.toggleRepeat() }) {
                     Icon(
-                        if (repeatMode == 2) Icons.Default.RepeatOne else Icons.Default.Repeat,
+                        if (playerState.repeatMode == 2) Icons.Default.RepeatOne else Icons.Default.Repeat,
                         contentDescription = "Repeat",
-                        tint = if (repeatMode > 0) RetroAmber else RetroCream.copy(alpha = 0.7f),
+                        tint = if (playerState.repeatMode > 0) SynthwavePink else RetroCream.copy(alpha = 0.7f),
                         modifier = Modifier.size(28.dp)
                     )
                 }

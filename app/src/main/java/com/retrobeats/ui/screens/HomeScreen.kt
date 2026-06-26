@@ -19,24 +19,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.retrobeats.data.model.Song
 import com.retrobeats.ui.components.SammyDedication
-import com.retrobeats.ui.theme.RetroAmber
 import com.retrobeats.ui.theme.RetroCream
 import com.retrobeats.ui.theme.RetroDark
-
-private val mockSongs = listOf(
-    Song(id = 1, title = "House of Memories", artist = "Echo", album = "Echoes", albumId = 1, duration = 213000, path = "", contentUri = "", albumArtUri = "", size = 0, dateAdded = 0),
-    Song(id = 2, title = "Billie Jean", artist = "Echo", album = "Echoes", albumId = 1, duration = 294000, path = "", contentUri = "", albumArtUri = "", size = 0, dateAdded = 0),
-    Song(id = 3, title = "Sweet Dreams", artist = "Echo", album = "Echoes", albumId = 1, duration = 187000, path = "", contentUri = "", albumArtUri = "", size = 0, dateAdded = 0),
-    Song(id = 4, title = "Gangsta's Paradise", artist = "Echo", album = "Echoes", albumId = 1, duration = 256000, path = "", contentUri = "", albumArtUri = "", size = 0, dateAdded = 0),
-    Song(id = 5, title = "Smells Like Teen Spirit", artist = "Echo", album = "Echoes", albumId = 1, duration = 301000, path = "", contentUri = "", albumArtUri = "", size = 0, dateAdded = 0),
-    Song(id = 6, title = "Someone Like You", artist = "Echo", album = "Echoes", albumId = 1, duration = 285000, path = "", contentUri = "", albumArtUri = "", size = 0, dateAdded = 0),
-    Song(id = 7, title = "Without Me", artist = "Echo", album = "Echoes", albumId = 1, duration = 217000, path = "", contentUri = "", albumArtUri = "", size = 0, dateAdded = 0),
-    Song(id = 8, title = "For the Damaged Coda", artist = "Echo", album = "Echoes", albumId = 1, duration = 198000, path = "", contentUri = "", albumArtUri = "", size = 0, dateAdded = 0),
-    Song(id = 9, title = "Arcade", artist = "Echo", album = "Echoes", albumId = 1, duration = 243000, path = "", contentUri = "", albumArtUri = "", size = 0, dateAdded = 0),
-    Song(id = 10, title = "No Surprises", artist = "Echo", album = "Echoes", albumId = 1, duration = 229000, path = "", contentUri = "", albumArtUri = "", size = 0, dateAdded = 0)
-)
+import com.retrobeats.ui.theme.SynthwavePink
+import com.retrobeats.ui.theme.SynthwavePurple
 
 enum class SortOption(val label: String) {
     TITLE("Title"), ARTIST("Artist"), ALBUM("Album"), NEWEST("Newest"), DURATION("Duration")
@@ -45,12 +34,10 @@ enum class SortOption(val label: String) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navController: androidx.navigation.NavController
+    navController: androidx.navigation.NavController,
+    viewModel: PlayerViewModel = hiltViewModel()
 ) {
-    var songs by remember { mutableStateOf(mockSongs) }
-    var isLoading by remember { mutableStateOf(false) }
-    var currentlyPlayingIndex by remember { mutableIntStateOf(-1) }
-    var isPlaying by remember { mutableStateOf(false) }
+    val playerState by viewModel.state.collectAsState()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     var searchQuery by remember { mutableStateOf("") }
     var sortMenuExpanded by remember { mutableStateOf(false) }
@@ -58,13 +45,13 @@ fun HomeScreen(
 
     val tabs = listOf("Songs", "Albums", "Artists", "Folders")
 
-    val filteredSongs = remember(searchQuery, selectedSort, songs) {
+    val filteredSongs = remember(searchQuery, selectedSort, playerState.songs) {
         val sorted = when (selectedSort) {
-            SortOption.TITLE -> songs
-            SortOption.ARTIST -> songs.sortedBy { it.artist }
-            SortOption.ALBUM -> songs.sortedBy { it.album }
-            SortOption.NEWEST -> songs.sortedByDescending { it.dateAdded }
-            SortOption.DURATION -> songs.sortedByDescending { it.duration }
+            SortOption.TITLE -> playerState.songs
+            SortOption.ARTIST -> playerState.songs.sortedBy { it.artist }
+            SortOption.ALBUM -> playerState.songs.sortedBy { it.album }
+            SortOption.NEWEST -> playerState.songs.sortedByDescending { it.dateAdded }
+            SortOption.DURATION -> playerState.songs.sortedByDescending { it.duration }
         }
         if (searchQuery.isBlank()) sorted
         else sorted.filter {
@@ -73,12 +60,17 @@ fun HomeScreen(
         }
     }
 
+    // Load songs on first composition
+    LaunchedEffect(Unit) {
+        viewModel.loadSongs()
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        "RetroBeats",
+                        "TapeDeck",
                         fontWeight = FontWeight.Bold,
                         fontSize = 22.sp
                     )
@@ -86,7 +78,7 @@ fun HomeScreen(
                 actions = {
                     Box {
                         IconButton(onClick = { sortMenuExpanded = true }) {
-                            Icon(Icons.Default.Sort, contentDescription = "Sort", tint = RetroAmber)
+                            Icon(Icons.Default.Sort, contentDescription = "Sort", tint = SynthwavePink)
                         }
                         DropdownMenu(
                             expanded = sortMenuExpanded,
@@ -97,7 +89,7 @@ fun HomeScreen(
                                     text = {
                                         Text(
                                             option.label,
-                                            color = if (option == selectedSort) RetroAmber else RetroCream
+                                            color = if (option == selectedSort) SynthwavePink else RetroCream
                                         )
                                     },
                                     onClick = {
@@ -106,7 +98,7 @@ fun HomeScreen(
                                     },
                                     leadingIcon = {
                                         if (option == selectedSort) {
-                                            Icon(Icons.Default.Check, contentDescription = null, tint = RetroAmber)
+                                            Icon(Icons.Default.Check, contentDescription = null, tint = SynthwavePink)
                                         }
                                     }
                                 )
@@ -119,18 +111,19 @@ fun HomeScreen(
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
-                    titleContentColor = RetroAmber
+                    titleContentColor = SynthwavePink
                 )
             )
         },
         bottomBar = {
             Column {
                 // Mini player bar
-                if (currentlyPlayingIndex >= 0) {
+                if (playerState.currentSong != null) {
                     MiniPlayerBar(
-                        song = filteredSongs.getOrNull(currentlyPlayingIndex),
-                        isPlaying = isPlaying,
-                        onPlayPause = { isPlaying = !isPlaying }
+                        song = playerState.currentSong!!,
+                        isPlaying = playerState.isPlaying,
+                        onPlayPause = { viewModel.playPause() },
+                        onClick = { navController.navigate("now_playing") }
                     )
                 }
                 // Dedication
@@ -139,7 +132,7 @@ fun HomeScreen(
                         .fillMaxWidth()
                         .padding(vertical = 6.dp),
                     animationStyle = com.retrobeats.data.SammyAnimationStyle.ORBIT_TEXT,
-                    textColor = RetroAmber.copy(alpha = 0.6f)
+                    textColor = SynthwavePurple.copy(alpha = 0.6f)
                 )
             }
         },
@@ -154,11 +147,11 @@ fun HomeScreen(
             ScrollableTabRow(
                 selectedTabIndex = selectedTabIndex,
                 containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = RetroAmber,
+                contentColor = SynthwavePink,
                 edgePadding = 16.dp,
                 indicator = {
                     TabRowDefaults.SecondaryIndicator(
-                        color = RetroAmber,
+                        color = SynthwavePink,
                         height = 3.dp
                     )
                 },
@@ -172,7 +165,7 @@ fun HomeScreen(
                             Text(
                                 title,
                                 fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal,
-                                color = if (selectedTabIndex == index) RetroAmber else RetroCream.copy(alpha = 0.6f)
+                                color = if (selectedTabIndex == index) SynthwavePink else RetroCream.copy(alpha = 0.6f)
                             )
                         }
                     )
@@ -187,7 +180,7 @@ fun HomeScreen(
                 onValueChange = { searchQuery = it },
                 placeholder = { Text("Search songs...", color = RetroCream.copy(alpha = 0.4f)) },
                 leadingIcon = {
-                    Icon(Icons.Default.Search, contentDescription = "Search", tint = RetroAmber)
+                    Icon(Icons.Default.Search, contentDescription = "Search", tint = SynthwavePink)
                 },
                 trailingIcon = {
                     if (searchQuery.isNotEmpty()) {
@@ -201,24 +194,50 @@ fun HomeScreen(
                     .padding(horizontal = 16.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = RetroAmber,
+                    focusedBorderColor = SynthwavePink,
                     unfocusedBorderColor = RetroCream.copy(alpha = 0.3f),
                     focusedTextColor = RetroCream,
                     unfocusedTextColor = RetroCream,
-                    cursorColor = RetroAmber
+                    cursorColor = SynthwavePink
                 ),
                 singleLine = true
             )
 
             Spacer(Modifier.height(8.dp))
 
-            if (isLoading) {
+            if (playerState.isLoading) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(color = RetroAmber)
+                    CircularProgressIndicator(color = SynthwavePink)
+                }
+            } else if (filteredSongs.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            Icons.Default.MusicOff,
+                            contentDescription = null,
+                            tint = RetroCream.copy(alpha = 0.3f),
+                            modifier = Modifier.size(64.dp)
+                        )
+                        Spacer(Modifier.height(16.dp))
+                        Text(
+                            "No music found",
+                            color = RetroCream.copy(alpha = 0.5f),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        Text(
+                            "Add music to your device or tap Scan Library",
+                            color = RetroCream.copy(alpha = 0.3f),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                 }
             } else {
                 // Song list
@@ -228,12 +247,12 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     itemsIndexed(filteredSongs) { index, song ->
+                        val actualIndex = playerState.songs.indexOf(song)
                         SongItem(
                             song = song,
-                            isPlaying = isPlaying && currentlyPlayingIndex == index,
+                            isPlaying = playerState.isPlaying && playerState.currentIndex == actualIndex,
                             onClick = {
-                                currentlyPlayingIndex = index
-                                isPlaying = true
+                                viewModel.playSong(actualIndex)
                                 navController.navigate("now_playing")
                             }
                         )
@@ -246,14 +265,15 @@ fun HomeScreen(
 
 @Composable
 private fun MiniPlayerBar(
-    song: Song?,
+    song: Song,
     isPlaying: Boolean,
-    onPlayPause: () -> Unit
+    onPlayPause: () -> Unit,
+    onClick: () -> Unit
 ) {
-    if (song == null) return
-
     Surface(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         color = RetroDark,
         shadowElevation = 4.dp,
         tonalElevation = 2.dp
@@ -272,7 +292,7 @@ private fun MiniPlayerBar(
                     .clip(RoundedCornerShape(2.dp))
                     .background(
                         Brush.verticalGradient(
-                            colors = listOf(RetroAmber, RetroAmber.copy(alpha = 0.4f))
+                            colors = listOf(SynthwavePink, SynthwavePurple)
                         )
                     )
             )
@@ -301,7 +321,7 @@ private fun MiniPlayerBar(
                 Icon(
                     if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
                     contentDescription = if (isPlaying) "Pause" else "Play",
-                    tint = RetroAmber
+                    tint = SynthwavePink
                 )
             }
         }
@@ -321,7 +341,7 @@ private fun SongItem(
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (isPlaying)
-                RetroAmber.copy(alpha = 0.15f)
+                SynthwavePink.copy(alpha = 0.15f)
             else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
         )
     ) {
@@ -335,13 +355,13 @@ private fun SongItem(
                 modifier = Modifier
                     .size(48.dp)
                     .clip(RoundedCornerShape(6.dp))
-                    .background(RetroAmber.copy(alpha = 0.2f)),
+                    .background(SynthwavePurple.copy(alpha = 0.2f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     Icons.Default.MusicNote,
                     contentDescription = null,
-                    tint = RetroAmber,
+                    tint = SynthwavePink,
                     modifier = Modifier.size(24.dp)
                 )
             }

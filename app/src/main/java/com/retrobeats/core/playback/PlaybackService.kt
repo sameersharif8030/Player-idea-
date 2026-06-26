@@ -28,6 +28,10 @@ class PlaybackService : MediaSessionService() {
                 override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
                     mediaSessionManager.onPlayerStateChanged()
                 }
+
+                override fun onMediaItemTransition(mediaItem: androidx.media3.common.MediaItem?, reason: Int) {
+                    mediaSessionManager.onPlayerStateChanged()
+                }
             })
         }
 
@@ -37,6 +41,13 @@ class PlaybackService : MediaSessionService() {
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? {
         return mediaSession
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        intent?.action?.let { action ->
+            mediaSessionManager.handleAction(action)
+        }
+        return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {

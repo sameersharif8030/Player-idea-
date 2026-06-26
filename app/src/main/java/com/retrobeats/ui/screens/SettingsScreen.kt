@@ -1,13 +1,11 @@
 package com.retrobeats.ui.screens
 
 import android.widget.Toast
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -21,9 +19,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.retrobeats.core.playback.StealthModeManager
 import com.retrobeats.data.AccentColor
 import com.retrobeats.data.SammyAnimationStyle
@@ -33,22 +31,20 @@ import com.retrobeats.ui.components.NeonBarsVisualizer
 import com.retrobeats.ui.components.OrbitRingVisualizer
 import com.retrobeats.ui.components.SammyDedication
 import com.retrobeats.ui.components.StarburstVisualizer
-import com.retrobeats.ui.theme.AccentAmber
 import com.retrobeats.ui.theme.AccentCyan
 import com.retrobeats.ui.theme.AccentGreen
 import com.retrobeats.ui.theme.AccentMagenta
-import com.retrobeats.ui.theme.RetroAmber
 import com.retrobeats.ui.theme.RetroCream
 import com.retrobeats.ui.theme.RetroDark
-import com.retrobeats.ui.theme.getAccentColor
+import com.retrobeats.ui.theme.SynthwavePink
+import com.retrobeats.ui.theme.SynthwavePurple
 import kotlinx.coroutines.launch
-import kotlin.math.cos
-import kotlin.math.sin
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    navController: androidx.navigation.NavController
+    navController: androidx.navigation.NavController,
+    playerViewModel: PlayerViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
     var stealthEnabled by remember { mutableStateOf(false) }
@@ -63,12 +59,12 @@ fun SettingsScreen(
     // State for settings
     var selectedTheme by remember { mutableStateOf(ThemeVariant.DARK_SYNTHWAVE) }
     var selectedVisualizer by remember { mutableStateOf(VisualizerStyle.NEON_BARS) }
-    var selectedAccent by remember { mutableStateOf(AccentColor.AMBER) }
+    var selectedAccent by remember { mutableStateOf(AccentColor.MAGENTA) }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Settings", color = RetroAmber, fontWeight = FontWeight.Bold) },
+                title = { Text("Settings", color = SynthwavePink, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = RetroCream)
@@ -105,7 +101,7 @@ fun SettingsScreen(
                     ThemeVariant.CRT_TERMINAL -> "CRT Terminal"
                 }
                 val themeDescription = when (theme) {
-                    ThemeVariant.DARK_SYNTHWAVE -> "Deep purples and neon ambers"
+                    ThemeVariant.DARK_SYNTHWAVE -> "Pink & purple neon glow on deep black"
                     ThemeVariant.CASSETTE_DECK -> "Warm analog cassette vibes"
                     ThemeVariant.CRT_TERMINAL -> "Green phosphor terminal glow"
                 }
@@ -118,13 +114,13 @@ fun SettingsScreen(
                         .then(
                             if (isSelected) Modifier.border(
                                 2.dp,
-                                RetroAmber,
+                                SynthwavePink,
                                 RoundedCornerShape(12.dp)
                             ) else Modifier
                         ),
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = if (isSelected) RetroAmber.copy(alpha = 0.1f)
+                        containerColor = if (isSelected) SynthwavePink.copy(alpha = 0.1f)
                         else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
                     )
                 ) {
@@ -138,7 +134,7 @@ fun SettingsScreen(
                             selected = isSelected,
                             onClick = { selectedTheme = theme },
                             colors = RadioButtonDefaults.colors(
-                                selectedColor = RetroAmber,
+                                selectedColor = SynthwavePink,
                                 unselectedColor = RetroCream.copy(alpha = 0.5f)
                             )
                         )
@@ -148,7 +144,7 @@ fun SettingsScreen(
                                 themeName,
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
-                                color = if (isSelected) RetroAmber else RetroCream
+                                color = if (isSelected) SynthwavePink else RetroCream
                             )
                             Text(
                                 themeDescription,
@@ -171,7 +167,7 @@ fun SettingsScreen(
                                 .border(
                                     1.dp,
                                     when (theme) {
-                                        ThemeVariant.DARK_SYNTHWAVE -> RetroAmber.copy(alpha = 0.5f)
+                                        ThemeVariant.DARK_SYNTHWAVE -> SynthwavePink.copy(alpha = 0.5f)
                                         ThemeVariant.CASSETTE_DECK -> Color(0xFFFFAB40).copy(alpha = 0.5f)
                                         ThemeVariant.CRT_TERMINAL -> Color(0xFF00FF00).copy(alpha = 0.5f)
                                     },
@@ -208,13 +204,13 @@ fun SettingsScreen(
                         .then(
                             if (isSelected) Modifier.border(
                                 2.dp,
-                                RetroAmber,
+                                SynthwavePink,
                                 RoundedCornerShape(12.dp)
                             ) else Modifier
                         ),
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = if (isSelected) RetroAmber.copy(alpha = 0.1f)
+                        containerColor = if (isSelected) SynthwavePink.copy(alpha = 0.1f)
                         else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
                     )
                 ) {
@@ -231,7 +227,7 @@ fun SettingsScreen(
                                 selected = isSelected,
                                 onClick = { selectedVisualizer = visualizer },
                                 colors = RadioButtonDefaults.colors(
-                                    selectedColor = RetroAmber,
+                                    selectedColor = SynthwavePink,
                                     unselectedColor = RetroCream.copy(alpha = 0.5f)
                                 )
                             )
@@ -240,7 +236,7 @@ fun SettingsScreen(
                                 visualizerName,
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
-                                color = if (isSelected) RetroAmber else RetroCream
+                                color = if (isSelected) SynthwavePink else RetroCream
                             )
                         }
 
@@ -258,23 +254,23 @@ fun SettingsScreen(
                                     VisualizerStyle.NEON_BARS -> NeonBarsVisualizer(
                                         modifier = Modifier.fillMaxSize().padding(4.dp),
                                         barCount = 16,
-                                        activeColor = RetroAmber
+                                        activeColor = SynthwavePink
                                     )
                                     VisualizerStyle.OSCILLOSCOPE -> {
                                         com.retrobeats.ui.components.OscilloscopeVisualizer(
                                             modifier = Modifier.fillMaxSize().padding(4.dp),
-                                            waveColor = RetroAmber,
-                                            glowColor = RetroAmber.copy(alpha = 0.3f)
+                                            waveColor = SynthwavePink,
+                                            glowColor = SynthwavePink.copy(alpha = 0.3f)
                                         )
                                     }
                                     VisualizerStyle.ORBIT_RING -> OrbitRingVisualizer(
                                         modifier = Modifier.fillMaxSize().padding(4.dp),
-                                        ringColor = RetroAmber,
-                                        particleColor = RetroAmber
+                                        ringColor = SynthwavePurple,
+                                        particleColor = SynthwavePink
                                     )
                                     VisualizerStyle.STARBURST -> StarburstVisualizer(
                                         modifier = Modifier.fillMaxSize().padding(4.dp),
-                                        burstColor = RetroAmber,
+                                        burstColor = SynthwavePink,
                                         rayCount = 16
                                     )
                                 }
@@ -298,10 +294,10 @@ fun SettingsScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 AccentColorOption(
-                    color = AccentAmber,
-                    label = "Amber",
-                    isSelected = selectedAccent == AccentColor.AMBER,
-                    onClick = { selectedAccent = AccentColor.AMBER }
+                    color = SynthwavePink,
+                    label = "Pink",
+                    isSelected = selectedAccent == AccentColor.MAGENTA,
+                    onClick = { selectedAccent = AccentColor.MAGENTA }
                 )
                 AccentColorOption(
                     color = AccentCyan,
@@ -310,10 +306,10 @@ fun SettingsScreen(
                     onClick = { selectedAccent = AccentColor.CYAN }
                 )
                 AccentColorOption(
-                    color = AccentMagenta,
-                    label = "Magenta",
-                    isSelected = selectedAccent == AccentColor.MAGENTA,
-                    onClick = { selectedAccent = AccentColor.MAGENTA }
+                    color = com.retrobeats.ui.theme.AccentAmber,
+                    label = "Amber",
+                    isSelected = selectedAccent == AccentColor.AMBER,
+                    onClick = { selectedAccent = AccentColor.AMBER }
                 )
                 AccentColorOption(
                     color = AccentGreen,
@@ -348,7 +344,7 @@ fun SettingsScreen(
                     Icon(
                         Icons.Default.VisibilityOff,
                         contentDescription = null,
-                        tint = RetroAmber,
+                        tint = SynthwavePink,
                         modifier = Modifier.size(28.dp)
                     )
                     Spacer(Modifier.width(16.dp))
@@ -375,7 +371,7 @@ fun SettingsScreen(
                         },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = RetroDark,
-                            checkedTrackColor = RetroAmber,
+                            checkedTrackColor = SynthwavePink,
                             uncheckedThumbColor = RetroCream.copy(alpha = 0.5f),
                             uncheckedTrackColor = RetroCream.copy(alpha = 0.2f)
                         )
@@ -404,48 +400,16 @@ fun SettingsScreen(
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
-                    // Add Local Audio button
+                    // Scan Library button — actually works now
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(8.dp))
                             .clickable {
                                 Toast
-                                    .makeText(appContext, "Opening file picker...", Toast.LENGTH_SHORT)
+                                    .makeText(appContext, "Scanning music library...", Toast.LENGTH_SHORT)
                                     .show()
-                            }
-                            .padding(vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Default.Add,
-                            contentDescription = null,
-                            tint = RetroAmber,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Spacer(Modifier.width(16.dp))
-                        Text(
-                            "Add Local Audio",
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Medium,
-                            color = RetroCream
-                        )
-                    }
-
-                    HorizontalDivider(
-                        color = RetroCream.copy(alpha = 0.1f),
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    )
-
-                    // Scan Library button
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(8.dp))
-                            .clickable {
-                                Toast
-                                    .makeText(appContext, "Scanning library...", Toast.LENGTH_SHORT)
-                                    .show()
+                                playerViewModel.loadSongs()
                             }
                             .padding(vertical = 12.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -453,7 +417,7 @@ fun SettingsScreen(
                         Icon(
                             Icons.Default.LibraryMusic,
                             contentDescription = null,
-                            tint = RetroAmber,
+                            tint = SynthwavePink,
                             modifier = Modifier.size(24.dp)
                         )
                         Spacer(Modifier.width(16.dp))
@@ -492,14 +456,19 @@ fun SettingsScreen(
                     SammyDedication(
                         modifier = Modifier.size(120.dp),
                         animationStyle = SammyAnimationStyle.ORBIT_TEXT,
-                        textColor = RetroAmber
+                        textColor = SynthwavePink
                     )
                     Spacer(Modifier.height(16.dp))
                     Text(
-                        "RetroBeats v1.0",
+                        "TapeDeck v1.0",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = RetroCream
+                    )
+                    Text(
+                        "A retro-style music player with stealth mode",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = RetroCream.copy(alpha = 0.6f)
                     )
                 }
             }
@@ -513,10 +482,10 @@ fun SettingsScreen(
 private fun SectionHeader(title: String) {
     Text(
         title,
-        style = MaterialTheme.typography.titleSmall,
-        color = RetroAmber,
+        style = MaterialTheme.typography.labelLarge,
+        color = SynthwavePink.copy(alpha = 0.7f),
         fontWeight = FontWeight.Bold,
-        modifier = Modifier.padding(vertical = 8.dp)
+        letterSpacing = 1.5.sp
     )
 }
 
@@ -529,15 +498,15 @@ private fun AccentColorOption(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable(onClick = onClick).padding(4.dp)
+        modifier = Modifier.clickable(onClick = onClick)
     ) {
         Box(
             modifier = Modifier
-                .size(48.dp)
-                .clip(CircleShape)
+                .size(40.dp)
+                .clip(androidx.compose.foundation.shape.CircleShape)
                 .background(color)
                 .then(
-                    if (isSelected) Modifier.border(3.dp, Color.White, CircleShape)
+                    if (isSelected) Modifier.border(3.dp, Color.White, androidx.compose.foundation.shape.CircleShape)
                     else Modifier
                 )
         )

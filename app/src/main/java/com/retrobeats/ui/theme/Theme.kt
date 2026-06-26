@@ -1,10 +1,8 @@
 package com.retrobeats.ui.theme
 
 import android.app.Activity
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
@@ -15,23 +13,23 @@ import com.retrobeats.data.AccentColor
 import com.retrobeats.data.ThemeVariant
 
 private val DarkSynthwaveColorScheme = darkColorScheme(
-    primary = RetroAmber,
-    onPrimary = RetroDark,
-    primaryContainer = RetroAmberDark,
+    primary = SynthwavePink,
+    onPrimary = Color.Black,
+    primaryContainer = SynthwavePinkDark,
     onPrimaryContainer = RetroCream,
-    secondary = RetroAmberLight,
-    onSecondary = RetroDark,
-    secondaryContainer = RetroDarkSurface,
+    secondary = SynthwavePurple,
+    onSecondary = Color.Black,
+    secondaryContainer = SynthwaveSurface,
     onSecondaryContainer = RetroCream,
-    tertiary = RetroOrange,
-    onTertiary = Color.White,
+    tertiary = SynthwavePurpleLight,
+    onTertiary = Color.Black,
     background = SynthwaveBackground,
     onBackground = RetroCream,
     surface = SynthwaveSurface,
     onSurface = RetroCream,
-    surfaceVariant = RetroDarkSurface,
+    surfaceVariant = RetroDarkCard,
     onSurfaceVariant = RetroCream.copy(alpha = 0.8f),
-    outline = RetroAmber.copy(alpha = 0.3f),
+    outline = SynthwavePink.copy(alpha = 0.3f),
     outlineVariant = RetroCream.copy(alpha = 0.2f),
     error = RetroRed,
     onError = Color.White
@@ -87,7 +85,7 @@ fun getAccentColor(accent: AccentColor): Color {
     return when (accent) {
         AccentColor.AMBER -> AccentAmber
         AccentColor.CYAN -> AccentCyan
-        AccentColor.MAGENTA -> AccentMagenta
+        AccentColor.MAGENTA -> SynthwavePink
         AccentColor.GREEN -> AccentGreen
     }
 }
@@ -95,7 +93,7 @@ fun getAccentColor(accent: AccentColor): Color {
 @Composable
 fun RetroBeatsTheme(
     themeVariant: ThemeVariant = ThemeVariant.DARK_SYNTHWAVE,
-    accentColor: AccentColor = AccentColor.AMBER,
+    accentColor: AccentColor = AccentColor.MAGENTA,
     content: @Composable () -> Unit
 ) {
     val baseScheme = when (themeVariant) {
