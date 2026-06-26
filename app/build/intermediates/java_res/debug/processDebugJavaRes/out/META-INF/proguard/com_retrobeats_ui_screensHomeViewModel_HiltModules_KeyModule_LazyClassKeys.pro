@@ -1,2 +1,0 @@
--keep,allowobfuscation,allowshrinking class com.retrobeats.ui.screens.HomeViewModel
--keep,allowobfuscation,allowshrinking class com.retrobeats.ui.screens.HomeViewModel

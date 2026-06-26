@@ -1,13 +1,12 @@
 *.iml
-.gradle
-/local.properties
-/.idea
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+.gradle/
+build/
+app/build/
 local.properties
+.idea/
+.DS_Store
+.cxx/
+.externalNativeBuild/
 *.apk
 *.aab
 *.ap_
@@ -15,3 +14,4 @@ local.properties
 *.class
 __pycache__/
 *.py
+test_*
