@@ -1,0 +1,209 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.retrobeats"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="35" />
+10
+11    <!-- Audio permissions -->
+12    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+12-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:6:5-75
+12-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:6:22-72
+13    <uses-permission
+13-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:7:5-8:38
+14        android:name="android.permission.READ_EXTERNAL_STORAGE"
+14-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:7:22-77
+15        android:maxSdkVersion="32" />
+15-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:8:9-35
+16
+17    <!-- Foreground service -->
+18    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+18-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:11:5-77
+18-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:11:22-74
+19    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+19-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:12:5-92
+19-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:12:22-89
+20    <uses-permission android:name="android.permission.WAKE_LOCK" />
+20-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:13:5-68
+20-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:13:22-65
+21    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+21-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:14:5-77
+21-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:14:22-74
+22    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+22-->[androidx.media3:media3-common:1.5.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\619f755298342cdb279e1292cd1b7cd9\transformed\media3-common-1.5.1\AndroidManifest.xml:22:5-79
+22-->[androidx.media3:media3-common:1.5.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\619f755298342cdb279e1292cd1b7cd9\transformed\media3-common-1.5.1\AndroidManifest.xml:22:22-76
+23
+24    <permission
+24-->[androidx.core:core:1.15.0] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\d16a24a2d5e63e554b21a8013a561418\transformed\core-1.15.0\AndroidManifest.xml:22:5-24:47
+25        android:name="com.retrobeats.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+25-->[androidx.core:core:1.15.0] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\d16a24a2d5e63e554b21a8013a561418\transformed\core-1.15.0\AndroidManifest.xml:23:9-81
+26        android:protectionLevel="signature" />
+26-->[androidx.core:core:1.15.0] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\d16a24a2d5e63e554b21a8013a561418\transformed\core-1.15.0\AndroidManifest.xml:24:9-44
+27
+28    <uses-permission android:name="com.retrobeats.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+28-->[androidx.core:core:1.15.0] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\d16a24a2d5e63e554b21a8013a561418\transformed\core-1.15.0\AndroidManifest.xml:26:5-97
+28-->[androidx.core:core:1.15.0] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\d16a24a2d5e63e554b21a8013a561418\transformed\core-1.15.0\AndroidManifest.xml:26:22-94
+29
+30    <application
+30-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:16:5-61:19
+31        android:name="com.retrobeats.MainApplication"
+31-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:17:9-40
+32        android:allowBackup="true"
+32-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:18:9-35
+33        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+33-->[androidx.core:core:1.15.0] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\d16a24a2d5e63e554b21a8013a561418\transformed\core-1.15.0\AndroidManifest.xml:28:18-86
+34        android:debuggable="true"
+35        android:extractNativeLibs="false"
+36        android:icon="@mipmap/ic_launcher"
+36-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:19:9-43
+37        android:label="@string/app_name"
+37-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:20:9-41
+38        android:roundIcon="@mipmap/ic_launcher_round"
+38-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:21:9-54
+39        android:supportsRtl="true"
+39-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:22:9-35
+40        android:theme="@style/Theme.RetroBeats" >
+40-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:23:9-48
+41        <activity
+41-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:26:9-34:20
+42            android:name="com.retrobeats.MainActivity"
+42-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:27:13-41
+43            android:exported="true"
+43-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:28:13-36
+44            android:theme="@style/Theme.RetroBeats" >
+44-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:29:13-52
+45            <intent-filter>
+45-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:30:13-33:29
+46                <action android:name="android.intent.action.MAIN" />
+46-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:31:17-69
+46-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:31:25-66
+47
+48                <category android:name="android.intent.category.LAUNCHER" />
+48-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:32:17-77
+48-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:32:27-74
+49            </intent-filter>
+50        </activity>
+51
+52        <service
+52-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:36:9-43:19
+53            android:name="com.retrobeats.core.playback.PlaybackService"
+53-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:37:13-58
+54            android:exported="false"
+54-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:38:13-37
+55            android:foregroundServiceType="mediaPlayback" >
+55-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:39:13-58
+56            <intent-filter>
+56-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:40:13-42:29
+57                <action android:name="android.media.browse.MediaBrowserService" />
+57-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:41:17-83
+57-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:41:25-80
+58            </intent-filter>
+59        </service>
+60
+61        <receiver
+61-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:45:9-51:20
+62            android:name="com.retrobeats.receiver.MediaButtonReceiver"
+62-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:46:13-57
+63            android:exported="true" >
+63-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:47:13-36
+64            <intent-filter>
+64-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:48:13-50:29
+65                <action android:name="android.intent.action.MEDIA_BUTTON" />
+65-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:49:17-77
+65-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:49:25-74
+66            </intent-filter>
+67        </receiver>
+68        <receiver
+68-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:53:9-59:20
+69            android:name="com.retrobeats.receiver.AudioBecomingNoisyReceiver"
+69-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:54:13-64
+70            android:exported="true" >
+70-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:55:13-36
+71            <intent-filter>
+71-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:56:13-58:29
+72                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
+72-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:57:17-77
+72-->C:\Users\Sameer\Projects\RetroBeats\app\src\main\AndroidManifest.xml:57:25-74
+73            </intent-filter>
+74        </receiver>
+75
+76        <provider
+76-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\83874c075bc700f28f39f3e7ba78290d\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+77            android:name="androidx.startup.InitializationProvider"
+77-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\83874c075bc700f28f39f3e7ba78290d\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
+78            android:authorities="com.retrobeats.androidx-startup"
+78-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\83874c075bc700f28f39f3e7ba78290d\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
+79            android:exported="false" >
+79-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\83874c075bc700f28f39f3e7ba78290d\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
+80            <meta-data
+80-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\83874c075bc700f28f39f3e7ba78290d\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+81                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+81-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\83874c075bc700f28f39f3e7ba78290d\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+82                android:value="androidx.startup" />
+82-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\83874c075bc700f28f39f3e7ba78290d\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+83            <meta-data
+83-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\4e60c47bfaccf78f4e8d65dcec84a787\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:29:13-31:52
+84                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+84-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\4e60c47bfaccf78f4e8d65dcec84a787\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:30:17-78
+85                android:value="androidx.startup" />
+85-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\4e60c47bfaccf78f4e8d65dcec84a787\transformed\lifecycle-process-2.8.7\AndroidManifest.xml:31:17-49
+86            <meta-data
+86-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+87                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+87-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+88                android:value="androidx.startup" />
+88-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+89        </provider>
+90
+91        <service
+91-->[androidx.room:room-runtime:2.6.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\4b119c1bda99a2cfe027fdb91c149f66\transformed\room-runtime-2.6.1\AndroidManifest.xml:24:9-28:63
+92            android:name="androidx.room.MultiInstanceInvalidationService"
+92-->[androidx.room:room-runtime:2.6.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\4b119c1bda99a2cfe027fdb91c149f66\transformed\room-runtime-2.6.1\AndroidManifest.xml:25:13-74
+93            android:directBootAware="true"
+93-->[androidx.room:room-runtime:2.6.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\4b119c1bda99a2cfe027fdb91c149f66\transformed\room-runtime-2.6.1\AndroidManifest.xml:26:13-43
+94            android:exported="false" />
+94-->[androidx.room:room-runtime:2.6.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\4b119c1bda99a2cfe027fdb91c149f66\transformed\room-runtime-2.6.1\AndroidManifest.xml:27:13-37
+95
+96        <receiver
+96-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+97            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+97-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+98            android:directBootAware="false"
+98-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+99            android:enabled="true"
+99-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+100            android:exported="true"
+100-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+101            android:permission="android.permission.DUMP" >
+101-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+102            <intent-filter>
+102-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+103                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+103-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+103-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+104            </intent-filter>
+105            <intent-filter>
+105-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+106                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+106-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+106-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+107            </intent-filter>
+108            <intent-filter>
+108-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+109                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+109-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+109-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+110            </intent-filter>
+111            <intent-filter>
+111-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+112                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+112-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+112-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Sameer\.gradle\caches\8.11.1\transforms\81aba10e1506702ea4e6e4a8e1d6a013\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+113            </intent-filter>
+114        </receiver>
+115    </application>
+116
+117</manifest>
