@@ -1,15 +1,15 @@
 package com.retrobeats.data
 
 enum class VisualizerStyle {
-    NEON_BARS, OSCILLOSCOPE, ORBIT_RING, STARBURST
+    NEON_BARS, OSCILLOSCOPE, ORBIT_RING, STARBURST, DANCING_PARTICLES
 }
 
-enum class ThemeVariant {
-    DARK_SYNTHWAVE, CASSETTE_DECK, CRT_TERMINAL
+enum class ThemeType {
+    DARK, LIGHT, HACKER, SUNSET, HATSUNE_MIKU
 }
 
 enum class AccentColor {
-    AMBER, CYAN, MAGENTA, GREEN
+    PINK, CYAN, MAGENTA, GREEN, AMBER
 }
 
 enum class SammyAnimationStyle {

@@ -27,11 +27,13 @@ class UserPreferences @Inject constructor(
         private val SORT_ORDER_KEY = stringPreferencesKey("sort_order")
     }
 
-    val themeVariantFlow: Flow<ThemeVariant> = context.userPrefsDataStore.data.map { prefs ->
+    val themeVariantFlow: Flow<ThemeType> = context.userPrefsDataStore.data.map { prefs ->
         when (prefs[THEME_VARIANT_KEY]) {
-            "CASSETTE_DECK" -> ThemeVariant.CASSETTE_DECK
-            "CRT_TERMINAL" -> ThemeVariant.CRT_TERMINAL
-            else -> ThemeVariant.DARK_SYNTHWAVE
+            "LIGHT" -> ThemeType.LIGHT
+            "HACKER" -> ThemeType.HACKER
+            "SUNSET" -> ThemeType.SUNSET
+            "HATSUNE_MIKU" -> ThemeType.HATSUNE_MIKU
+            else -> ThemeType.DARK
         }
     }
 
@@ -61,7 +63,7 @@ class UserPreferences @Inject constructor(
         }
     }
 
-    suspend fun setThemeVariant(variant: ThemeVariant) {
+    suspend fun setThemeVariant(variant: ThemeType) {
         context.userPrefsDataStore.edit { prefs ->
             prefs[THEME_VARIANT_KEY] = variant.name
         }

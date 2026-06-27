@@ -1,10 +1,7 @@
 package com.retrobeats.core.playback
 
 import android.content.Intent
-import androidx.media3.common.AudioAttributes
-import androidx.media3.common.C
 import androidx.media3.common.Player
-import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +32,8 @@ class PlaybackService : MediaSessionService() {
             })
         }
 
+        // MediaSession handles Bluetooth/headphone controls automatically
+        // via the system MediaButtonDispatcher. No custom callback needed.
         mediaSession = MediaSession.Builder(this, player).build()
         mediaSessionManager.initialize(mediaSession!!, audioEngine)
     }
@@ -45,7 +44,32 @@ class PlaybackService : MediaSessionService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.action?.let { action ->
-            mediaSessionManager.handleAction(action)
+            val player = audioEngine.getPlayer()
+            when (action) {
+                "ACTION_PLAY" -> {
+                    player.play()
+                    mediaSessionManager.onPlayerStateChanged()
+                }
+                "ACTION_PAUSE" -> {
+                    player.pause()
+                    mediaSessionManager.onPlayerStateChanged()
+                }
+                "ACTION_NEXT" -> {
+                    if (player.hasNextMediaItem()) {
+                        player.seekToNextMediaItem()
+                        player.play()
+                    }
+                }
+                "ACTION_PREV" -> {
+                    if (player.hasPreviousMediaItem()) {
+                        player.seekToPreviousMediaItem()
+                        player.play()
+                    }
+                }
+                "stop" -> {
+                    player.stop()
+                }
+            }
         }
         return super.onStartCommand(intent, flags, startId)
     }
